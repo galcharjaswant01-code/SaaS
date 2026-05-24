@@ -4,23 +4,27 @@ from django.shortcuts import render
 from visits.models import pagevisits
 this_dir = pathlib.Path(__file__).resolve().parent
 
-def home_page_view(request, *args, **kwargs):
+def home_view(request, *args, **kwargs):
+    return about_view(request, *args, **kwargs)
+    
+def about_view(requset, *args, **kwargs):
     qs = pagevisits.objects.all()
-    page_qs = pagevisits.objects.filter(path=request.path)
+    page_qs = pagevisits.objects.filter(path=requset.path)
+    try:
+        percent = (page_qs.count() * 100.0) / qs.count()
+    except:
+        percent = 0
+    html_ = "home.html"
     my_title = 'my page title'
     my_context = {
         'page_title' : my_title,
         'page_visits_count' : page_qs.count(),
-        'percent': (page_qs.count() * 100.0) / qs.count(),
+        'percent': percent,
         'total_visits_count' : qs.count()
     }
-    html_ = "home.html"
-    pagevisits.objects.create(path = request.path)
-    return render(request, html_, my_context)
     
-    # html_file_path = this_dir / 'home.html'
-    # html_ = html_file_path.read_text()
-    # return HttpResponse(html_)
+    pagevisits.objects.create(path = requset.path)
+    return render(requset, html_, my_context)
 
 def my_home_page_view(request, *args, **kwargs):
     my_title = 'my page title'
