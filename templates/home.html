@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block head_title%}HomePage{% endblock head_title%}
+{% block content%}
+
+<p>Hellow Woorlds</p>
+{% include "snippets/welcome_user.html" %}
+<p>
+Page Visits: {{ page_visits_count }}</p>
+<p>
+Total Visits: {{ total_visits_count }}</p>
+<p>
+Percent : {{ percent }}
+</p>
+{% endblock content%}
